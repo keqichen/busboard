@@ -1,9 +1,7 @@
 
 // postcode variable to generate lat and long
-
-//var postCode = "nw51tl"
-//let url = `api.postcodes.io/postcodes/${postCode}`;
-let url = `http://api.postcodes.io/postcodes/nw51tl`;
+var postCode = "nw51tl"
+let url = `http://api.postcodes.io/postcodes/${postCode}`;
 let postCodeAPIresponse = await fetch(url);
 let postCodeData = await postCodeAPIresponse.json()
 
