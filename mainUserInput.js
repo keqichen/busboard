@@ -1,14 +1,14 @@
 
 //readline
 //const readline = require(`readline - sync`);
-import * as readline from "readline-sync";
+import {prompt} from "readline-sync";
+//Alternative: import * as readline from "readline-sync"
 
 // postcode variable to generate lat and long
 
-
 //generate user input
 console.log("Please provide a postcode:");
-const userInput = readline.prompt();
+const userInput = prompt();
 const lowerCasePostCode = userInput.toLowerCase();
 const postCode = lowerCasePostCode.replace(" ","");
 //var postCode = "nw51tl"
