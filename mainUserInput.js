@@ -1,6 +1,5 @@
 
 //readline
-//const readline = require(`readline - sync`);
 import {prompt} from "readline-sync";
 //Alternative: import * as readline from "readline-sync"
 
@@ -15,9 +14,9 @@ const postCode = lowerCasePostCode.replace(" ","");
 let url = `http://api.postcodes.io/postcodes/${postCode}`;
 let postCodeAPIresponse = await fetch(url);
 let postCodeData = await postCodeAPIresponse.json()
-
 let lat = postCodeData.result.latitude;
 let long = postCodeData.result.longitude;
+
 let url2 = `https://api.tfl.gov.uk/StopPoint/?lat=${lat}&lon=${long}&stopTypes=NaptanPublicBusCoachTram`;
 let busAPIresponse = await fetch(url2);
 let busStopData = await busAPIresponse.json();
