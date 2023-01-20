@@ -1,7 +1,8 @@
 //To do list:
-//1.finalise formatting of console.log(...bsArray);
-//2.error handling: add clauses if the input is invalid for function 1;
 
+
+// do 123 tgt, and then add readme as we wish
+//4.break into more files;
 
 
 // Functions to be used in BusStops
@@ -9,12 +10,34 @@ import { prompt } from "readline-sync";
 
 // 1. Ask for input and convert postcode
 
-export function postCodeInput() {
+export async function postCodeInput() {
     console.log("Please provide a postcode:");
-    const userInput = prompt();
+    let userInput = prompt();
+    
+
+    //api to check postcode validity;
+    let url = `http://api.postcodes.io/postcodes/${userInput}/validate`;
+    let validityData = await fetch(url);
+    let validity = await validityData.json();
+    let validityResult = validity.result;
+   
+    while (validityResult===false){
+        console.log("Sorry, the postcode is not valid. Please try again.");
+        console.log("Please provide a postcode:");
+        userInput = prompt();
+
+        url = `http://api.postcodes.io/postcodes/${userInput}/validate`;
+        validityData = await fetch(url);
+        validity = await validityData.json();
+        validityResult = validity.result;
+    } 
+
     const lowerCasePostCode = userInput.toLowerCase();
     const postCode = lowerCasePostCode.replace(" ", ""); 
+
+
     return postCode;
+    
 } 
 
 // 2. Fetch postcode data from API 
@@ -69,9 +92,13 @@ export function busArray (busArrivalData){
         else {
             min = date.getMinutes();
         }
-        busArray.push(`${hour}:${min} ${busArrivalData[i].lineName} to ${busArrivalData[i].destinationName} \n`);
+        busArray.push(`\n ${hour}:${min} ${busArrivalData[i].lineName} to ${busArrivalData[i].destinationName} \n`);
         busArray.sort();
     }
-    return busArray;
+
+   
+        return busArray;
+    
+    
 }
     

@@ -1,10 +1,9 @@
 // BUSSTOPS
-// To do list:
 
 import * as mainFunctions from "./mainFunctions.js"
 
 // Function 1: Ask user for postcode and convert into usable format for API
-let postcode = mainFunctions.postCodeInput();
+let postcode = await mainFunctions.postCodeInput();
 
 // Function 2: Fetch postcode data from API and generate Latitude and Longitude from postcode
 let pcData = await mainFunctions.postCodeData(postcode); // put await here so that it knows to finish this function first, otherwise it will jump to the next one.
@@ -26,7 +25,10 @@ console.log(`The next busses to arrive at ${bsData.stopPoints[0].commonName} are
 let bsArrivalData = await mainFunctions.busArrivalData(bsData,0);
 let bsArray = mainFunctions.busArray(bsArrivalData);
 
-console.log(...bsArray);
+if (bsArray.length===0){
+    console.log("There is no imminent bus.\n")
+}else{
+    console.log(...bsArray)};
 
 // Print next busses to arrive for stop 2
 console.log(`The next busses to arrive at ${bsData.stopPoints[1].commonName} are: \n`);
@@ -34,4 +36,8 @@ console.log(`The next busses to arrive at ${bsData.stopPoints[1].commonName} are
 // Function 4
 bsArrivalData = await mainFunctions.busArrivalData(bsData,1);
 bsArray = mainFunctions.busArray(bsArrivalData);
-console.log(...bsArray);
+
+if (bsArray.length===0){
+    console.log("There is no imminent bus.\n")
+}else{
+    console.log(...bsArray)};
