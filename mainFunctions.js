@@ -1,10 +1,5 @@
 //To do list:
-
-
-// do 123 tgt, and then add readme as we wish
 //4.break into more files;
-
-
 // Functions to be used in BusStops
 import { prompt } from "readline-sync";
 
@@ -20,6 +15,8 @@ export async function postCodeInput() {
     let validityData = await fetch(url);
     let validity = await validityData.json();
     let validityResult = validity.result;
+
+    //try to improve this by using do..while;
    
     while (validityResult===false){
         console.log("Sorry, the postcode is not valid. Please try again.");
