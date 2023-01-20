@@ -1,3 +1,9 @@
+//To do list:
+//1.finalise formatting of console.log(...bsArray);
+//2.error handling: add clauses if the input is invalid for function 1;
+
+
+
 // Functions to be used in BusStops
 import { prompt } from "readline-sync";
 
@@ -9,14 +15,14 @@ export function postCodeInput() {
     const lowerCasePostCode = userInput.toLowerCase();
     const postCode = lowerCasePostCode.replace(" ", ""); 
     return postCode;
-}
+} 
 
 // 2. Fetch postcode data from API 
 export async function postCodeData(postCode){
-let url = `http://api.postcodes.io/postcodes/${postCode}`;
-let postCodeAPIresponse = await fetch(url);
-let postCodeData = await postCodeAPIresponse.json()
-return postCodeData;
+    let url = `http://api.postcodes.io/postcodes/${postCode}`;
+    let postCodeAPIresponse = await fetch(url); // if we don't await here it will not complete fetching everything.
+    let postCodeData = await postCodeAPIresponse.json()
+    return postCodeData;
 }
 
 //2.1 Generate Latitude
@@ -31,6 +37,41 @@ export function longPC(postCodeData){
 }
 
 // 3.  Fetch StopPoint data (commonName and indicator)
+export async function busStopData(lat,long){
+    let url = `https://api.tfl.gov.uk/StopPoint/?lat=${lat}&lon=${long}&stopTypes=NaptanPublicBusCoachTram`;
+    let busAPIresponse = await fetch(url);
+    let busStopData = await busAPIresponse.json();
+    return busStopData;
+}
 
-// 4. Generate busstop ID and fetch bus arrival data () and cut it to size and loop through all the incoming busses
 
+// 4.1 Generate busstop ID and fetch bus arrival data () and cut it to size
+export async function busArrivalData(busStopData,n){
+    let id = busStopData.stopPoints[n].id; 
+    
+    let url = `https://api.tfl.gov.uk/StopPoint/${id}/Arrivals`;
+    let busArrivalResponse = await fetch(url);
+    let busArrivalDataFull = await busArrivalResponse.json();
+    let busArrivalData = busArrivalDataFull.slice(0, 5);
+    return busArrivalData;
+}
+
+//4.2 loop through all the incoming busses
+export function busArray (busArrivalData){
+    let busArray = [];
+    for (let i = 0; i < busArrivalData.length; i++) {
+        let date = new Date(busArrivalData[i].expectedArrival);
+        let hour = date.getHours();
+        let min = 0;
+        if (date.getMinutes() < 10) {
+            min = '0' + date.getMinutes();
+        }
+        else {
+            min = date.getMinutes();
+        }
+        busArray.push(`${hour}:${min} ${busArrivalData[i].lineName} to ${busArrivalData[i].destinationName} \n`);
+        busArray.sort();
+    }
+    return busArray;
+}
+    
