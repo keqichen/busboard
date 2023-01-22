@@ -3,18 +3,12 @@
 // Functions to be used in BusStops
 import { prompt } from "readline-sync";
 
-// 1. Ask for input and convert postcode
 
+// 1.1 Ask for input and convert postcode
 export async function postCodeInput() {
     console.log("Please provide a postcode:");
     let userInput = prompt();
-    
-
-    //api to check postcode validity;
-    let url = `http://api.postcodes.io/postcodes/${userInput}/validate`;
-    let validityData = await fetch(url);
-    let validity = await validityData.json();
-    let validityResult = validity.result;
+    let validityResult = await check(userInput);
 
     //try to improve this by using do..while;
    
@@ -22,20 +16,22 @@ export async function postCodeInput() {
         console.log("Sorry, the postcode is not valid. Please try again.");
         console.log("Please provide a postcode:");
         userInput = prompt();
-
-        url = `http://api.postcodes.io/postcodes/${userInput}/validate`;
-        validityData = await fetch(url);
-        validity = await validityData.json();
-        validityResult = validity.result;
+        validityResult = await check(userInput);
     } 
 
     const lowerCasePostCode = userInput.toLowerCase();
     const postCode = lowerCasePostCode.replace(" ", ""); 
 
-
     return postCode;
-    
 } 
+
+//1.2 api to check validity
+export async function check(userInput){
+    let url = `http://api.postcodes.io/postcodes/${userInput}/validate`;
+    let validityData = await fetch(url);
+    let validity = await validityData.json();
+    return validity.result;
+}
 
 // 2. Fetch postcode data from API 
 export async function postCodeData(postCode){
